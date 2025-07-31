@@ -14,5 +14,3 @@ A simple and scalable blog REST API built with Node.js, Express, and MongoDB.
 - Express.js
 - MongoDB & Mongoose
 - dotenv
-
-## 📂 Project Structure
