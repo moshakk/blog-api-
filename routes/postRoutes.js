@@ -1,5 +1,6 @@
 const express = require('express');
 const postController = require('../controllers/postControllers');
+const commentRoutes = require('./commentRoutes');
 const router = express.Router();
 const Post = require('../models/post');
 
@@ -8,8 +9,9 @@ router
   .get(postController.getAllPosts)
   .post(postController.createPost);
 router
-  .route('/:id')
+  .route('/:postId')
   .get(postController.getPost)
   .patch(postController.updatePost)
   .delete(postController.deletePost);
+router.use('/:postId/comments', commentRoutes);
 module.exports = router;

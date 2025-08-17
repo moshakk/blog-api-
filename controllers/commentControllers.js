@@ -1,79 +1,75 @@
 const Comment = require('./../models/comment');
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
-exports.getCommentByPostId = async (req, res) => {
-  try {
-    let wantedPost = Comment.find({ postId: req.params.id });
-    const comment = await wantedPost;
-    console.log(req.params.id);
-    res.status(200).json({
-      status: 'succes',
-      data: {
-        comment,
-      },
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err,
-    });
+exports.getAllComments = catchAsync(async (req, res, next) => {
+  let filter = req.params.postId ? { postId: req.params.postId } : {};
+  const comments = await Comment.find(filter);
+  if (!comments) {
+    return next(new AppError('There is no comments', 404));
   }
-};
-exports.getComment = async (req, res) => {
-  try {
-    const commentId = req.params.id;
-    let comment = await Comment.findById(commentId);
-    res.status(200).json({
-      status: 'succes',
-      data: {
-        comment,
-      },
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-};
-exports.createComment = async (req, res) => {
-  try {
-    let newComment = new Comment({
-      ...req.body,
-      postId: req.params.id,
-    });
-    const saved = await newComment.save();
-    res.status(200).json({
-      status: 'succes',
-      data: {
-        saved,
-      },
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-};
-exports.deleteComment = async (req, res) => {
-  try {
-    const commentId = req.params.id;
-    console.log(commentId);
-    const deleted = await Comment.findByIdAndDelete(commentId);
+  res.status(200).json({
+    status: 'success',
+    data: {
+      comments,
+    },
+  });
+});
 
-    if (!deleted) {
-      return res.status(404).json({
-        status: 'fail',
-        message: 'Comment not found',
-      });
-    }
-    res.status(200).json({
-      status: 'success',
-      message: 'Comment deleted successfully',
-    });
-  } catch (err) {
-    res.status(500).json({ status: 'fail', error: 'Server error' });
-  }
+// exports.getCommentByPostId = catchAsync(async (req, res, next) => {
+//   let wantedPost = Comment.find({ postId: req.params.postId });
+//   const comment = await wantedPost;
+//   if (!wantedPost || !comment) {
+//     return next(new AppError('wrond id ', 404));
+//   }
+//   console.log(req.params.id);
+//   res.status(200).json({
+//     status: 'succes',
+//     data: {
+//       comment,
+//     },
+//   });
+// });
 
+exports.getComment = catchAsync(async (req, res, next) => {
+  const commentId = req.params.commentId;
+  let comment = await Comment.findById(commentId);
+  if (!comment) {
+    return next(new AppError(`No Comment with this ID`, 404));
+  }
+  res.status(200).json({
+    status: 'succes',
+    data: {
+      comment,
+    },
+  });
+});
+
+exports.createComment = catchAsync(async (req, res, next) => {
+  let newComment = new Comment({
+    ...req.body,
+    postId: req.params.postId || req.body.postId, // Now postId comes from request body
+  });
+  const saved = await newComment.save();
+  res.status(200).json({
+    status: 'succes',
+    data: {
+      saved,
+    },
+  });
+});
+
+exports.deleteComment = catchAsync(async (req, res, next) => {
+  const commentId = req.params.commentId;
+  console.log(commentId);
+  const deleted = await Comment.findByIdAndDelete(commentId);
+
+  if (!deleted) {
+    return next(new AppError(`No Comment with this ID`, 404));
+  }
+  res.status(200).json({
+    status: 'success',
+    message: 'Comment deleted successfully',
+  });
   //await Comment.findByIdAndDelete(req.params)
-};
+});
