@@ -10,6 +10,7 @@ exports.getAllComments = catchAsync(async (req, res, next) => {
   }
   res.status(200).json({
     status: 'success',
+    result: comments.length,
     data: {
       comments,
     },
@@ -38,7 +39,7 @@ exports.getComment = catchAsync(async (req, res, next) => {
     return next(new AppError(`No Comment with this ID`, 404));
   }
   res.status(200).json({
-    status: 'succes',
+    status: 'success',
     data: {
       comment,
     },
@@ -51,8 +52,8 @@ exports.createComment = catchAsync(async (req, res, next) => {
     postId: req.params.postId || req.body.postId, // Now postId comes from request body
   });
   const saved = await newComment.save();
-  res.status(200).json({
-    status: 'succes',
+  res.status(201).json({
+    status: 'success',
     data: {
       saved,
     },
@@ -67,7 +68,7 @@ exports.deleteComment = catchAsync(async (req, res, next) => {
   if (!deleted) {
     return next(new AppError(`No Comment with this ID`, 404));
   }
-  res.status(200).json({
+  res.status(204).json({
     status: 'success',
     message: 'Comment deleted successfully',
   });

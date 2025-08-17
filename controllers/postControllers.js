@@ -26,7 +26,7 @@ exports.getPost = catchAsync(async (req, res, next) => {
 });
 exports.createPost = catchAsync(async (req, res, next) => {
   let post = await Post.create(req.body);
-  res.status(200).json({
+  res.status(201).json({
     status: 'success',
     data: {
       post,
@@ -34,7 +34,7 @@ exports.createPost = catchAsync(async (req, res, next) => {
   });
 });
 exports.updatePost = catchAsync(async (req, res, next) => {
-  let post = await Post.findByIdAndUpdate(req.params.id, req.body, {
+  let post = await Post.findByIdAndUpdate(req.params.postId, req.body, {
     new: true,
     runValidators: true,
   });
@@ -49,7 +49,7 @@ exports.updatePost = catchAsync(async (req, res, next) => {
   });
 });
 exports.deletePost = catchAsync(async (req, res, next) => {
-  const post = await Post.findByIdAndDelete(req.params.id, {});
+  const post = await Post.findByIdAndDelete(req.params.postId, {});
   if (!post) {
     return next(new AppError(`No Post with this Id`, 404));
   }
