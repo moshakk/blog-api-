@@ -1,12 +1,15 @@
 const Post = require('../models/post');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const ApiFeatuers = require('./../utils/apiFeatuers');
 // CRUD operation
 exports.getAllPosts = catchAsync(async (req, res, next) => {
-  let query = Post.find();
-  let posts = await query;
+  const featuers = new ApiFeatuers(Post.find(), req.query).filter();
+  //let query = Post.find();
+  let posts = await featuers.query;
   res.status(200).json({
     status: 'success',
+    result: posts.length,
     data: {
       posts,
     },
@@ -43,6 +46,7 @@ exports.updatePost = catchAsync(async (req, res, next) => {
   }
   res.status(200).json({
     status: 'success',
+
     data: {
       post,
     },
