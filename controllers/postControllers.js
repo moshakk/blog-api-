@@ -4,7 +4,11 @@ const AppError = require('./../utils/appError');
 const ApiFeatuers = require('./../utils/apiFeatuers');
 // CRUD operation
 exports.getAllPosts = catchAsync(async (req, res, next) => {
-  const featuers = new ApiFeatuers(Post.find(), req.query).filter();
+  const featuers = new ApiFeatuers(Post.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
   //let query = Post.find();
   let posts = await featuers.query;
   res.status(200).json({
