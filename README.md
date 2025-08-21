@@ -1,7 +1,7 @@
 # Blog API
 
 A simple and scalable blog REST API built with Node.js, Express, and MongoDB.
-
+Project URL -> https://roadmap.sh/projects/blogging-platform-api
 ## Features
 
 - CRUD operations for posts
