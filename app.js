@@ -4,8 +4,7 @@ const AppError = require('./utils/appError');
 const globalError = require('./controllers/errorController');
 const postRoutes = require('./routes/postRoutes');
 const commentRoutes = require('./routes/commentRoutes');
-
-//require('dotenv').config();
+const userRoutes = require('./routes/userRoute');
 
 const app = express(); // create an express application
 if (process.env.NODE_ENV === 'development') {
@@ -17,7 +16,8 @@ app.use(express.json());
 // need to updated and make it more logical
 app.use('/api/posts', postRoutes);
 //app.use('/api/posts', commentRoutes);
-app.use('/api/comments', commentRoutes);
+//app.use('/api/comments', commentRoutes);
+app.use('/api/users', userRoutes);
 
 //Error handling middleware - now properly configured -- cause a crashing ->pathToRegexpError only at express 5
 // app.all('/(.*)', (req, res, next) => {
