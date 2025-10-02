@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 const AppError = require('./utils/appError');
 const globalError = require('./controllers/errorController');
 const postRoutes = require('./routes/postRoutes');
@@ -8,6 +9,7 @@ const userRoutes = require('./routes/userRoute');
 const { swaggerUi, specs } = require('./swagger');
 
 const app = express(); // create an express application
+app.use(cors());
 app.use(
   '/api-docs',
   swaggerUi.serve,
