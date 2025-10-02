@@ -5,7 +5,7 @@ const AppError = require('./../utils/appError');
 exports.getAllComments = catchAsync(async (req, res, next) => {
   let filter = req.params.postId ? { postId: req.params.postId } : {};
   const comments = await Comment.find(filter);
-  if (!comments) {
+  if (comments.length === 0) {
     return next(new AppError('There is no comments', 404));
   }
   res.status(200).json({
@@ -47,6 +47,8 @@ exports.getComment = catchAsync(async (req, res, next) => {
 });
 
 exports.createComment = catchAsync(async (req, res, next) => {
+  if (!req.body.postId) req.body.post = req.params.postId;
+  if (!req.body.user) req.body.user = req.user.id;
   let newComment = new Comment({
     ...req.body,
     postId: req.params.postId || req.body.postId, // Now postId comes from request body

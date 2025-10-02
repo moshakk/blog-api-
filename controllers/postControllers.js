@@ -20,7 +20,10 @@ exports.getAllPosts = catchAsync(async (req, res, next) => {
   });
 });
 exports.getPost = catchAsync(async (req, res, next) => {
-  let post = await Post.findById(req.params.postId);
+  let post = await Post.findById(req.params.postId).populate({
+    path: 'comments',
+    populate: { path: 'user', select: 'name' },
+  });
   if (!post) {
     return next(new AppError(`No Post with this Id`, 404));
   }

@@ -10,6 +10,7 @@ const { swaggerUi, specs } = require('./swagger');
 
 const app = express(); // create an express application
 app.use(cors());
+
 app.use(
   '/api-docs',
   swaggerUi.serve,
@@ -18,6 +19,7 @@ app.use(
     customCss: '.swagger-ui .topbar { display: none }',
     swaggerOptions: {
       persistAuthorization: true,
+      supportedSubmitMethods: [],
     },
   })
 );

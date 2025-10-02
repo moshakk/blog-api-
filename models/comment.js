@@ -15,6 +15,11 @@ const commentSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: [true, 'comment must belong to the user'],
+  },
 });
 const Comment = mongoose.model('Comment', commentSchema);
 module.exports = Comment;
