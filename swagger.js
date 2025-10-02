@@ -23,7 +23,7 @@ const options = {
         description: 'Development server',
       },
       {
-        url: 'blog-api-production-d03f.up.railway.app',
+        url: 'https://blog-api-production-d03f.up.railway.app',
         description: 'Production server',
       },
     ],

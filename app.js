@@ -23,7 +23,10 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 app.use(express.json());
-
+// Root route (for Railway health check + friendly message)
+app.get('/', (req, res) => {
+  res.send('Blog API is running... Visit /api-docs for Swagger UI');
+});
 // Clean routes without conflicts
 // need to updated and make it more logical
 app.use('/api/posts', postRoutes);
