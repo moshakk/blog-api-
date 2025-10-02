@@ -19,6 +19,10 @@ const options = {
     },
     servers: [
       {
+        url: '/',
+        description: 'Relative server (auto-detect host)',
+      },
+      {
         url: 'http://localhost:3000',
         description: 'Development server',
       },
@@ -165,7 +169,7 @@ const options = {
     ],
   },
   //apis: ['./routes/*.js', './controllers/*.js'], // Path to the API routes
-  apis: [__dirname + '/routes/*.js'],
+  apis: ['./routes/*.js', './controllers/*.js'],
 };
 
 const specs = swaggerJsdoc(options);
