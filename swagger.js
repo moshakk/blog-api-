@@ -164,7 +164,8 @@ const options = {
       },
     ],
   },
-  apis: ['./routes/*.js', './controllers/*.js'], // Path to the API routes
+  //apis: ['./routes/*.js', './controllers/*.js'], // Path to the API routes
+  apis: [__dirname + '/routes/*.js'],
 };
 
 const specs = swaggerJsdoc(options);
