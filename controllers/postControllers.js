@@ -22,6 +22,7 @@ exports.getAllPosts = catchAsync(async (req, res, next) => {
 exports.getPost = catchAsync(async (req, res, next) => {
   let post = await Post.findById(req.params.postId).populate({
     path: 'comments',
+    select: 'text',
     populate: { path: 'user', select: 'name' },
   });
   if (!post) {

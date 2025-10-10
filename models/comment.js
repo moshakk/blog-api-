@@ -10,7 +10,6 @@ const commentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  author: { type: String },
   createdAt: {
     type: Date,
     default: Date.now(),

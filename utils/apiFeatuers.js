@@ -5,14 +5,30 @@ class ApiFeatuers {
   }
   //127.0.0.1:8000/api/posts?tags=Node.js&likes[lte]=50
   filter() {
-    const queryObj = { ...this.queryString }; // { tags: 'Node.js', 'likes[gte]': '30' }
-    //console.log(queryObj);
-    const excludedField = ['page', 'sort', 'limit', 'fields']; // fileds not required with filtering
-    excludedField.forEach((el) => delete queryObj[el]); //{ tags: 'Node.js', 'likes[gte]': '30' }
-    let queryStr = JSON.stringify(queryObj); //{"tags":"Node.js","likes[gte]":"30"}
-    console.log(queryStr);
-
-    return this; // {"tags":"Node.js","likes":{"$lte":"50"}}
+    let queryObj = {};
+    const execludeFields = ['page', 'sort', 'limit', 'fields'];
+    //workin with req.query (querystring) { "tags"="Node.js" , 'likes[lte]'=50}
+    for (let key in this.queryString) {
+      if (!execludeFields.includes(key)) {
+        if (key.includes('[')) {
+          const [field, operator] = key.replace(']', '').split('[');
+          if (!queryObj[field]) queryObj[field] = {};
+          queryObj[field][`$${operator}`] = this.queryString[key];
+        } else {
+          queryObj[key] = this.queryString[key];
+        }
+      }
+    }
+    for (let field in queryObj) {
+      for (let op in queryObj[field]) {
+        const value = queryObj[field][op];
+        if (value === 'true') queryObj[field][op] = true;
+        else if (value === 'false') queryObj[field][op] = false;
+        else if (!isNaN(value)) queryObj[field][op] = Number(value);
+      }
+    }
+    this.query = this.query.find(queryObj);
+    return this;
   }
   //127.0.0.1:8000/api/posts?sort=-likes
   sort() {
